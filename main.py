@@ -3,7 +3,8 @@
 documents = [
   {"type": "passport", "number": "2207 876234", "name": "Василий Гупкин"},
     {"type": "invoice", "number": "11-2", "name": "Геннадий Покемонов"},
-    {"type": "insurance", "number": "10006", "name": "Аристарх Павлов"}
+    {"type": "insurance", "number": "10006", "name": "Аристарх Павлов"},
+    {"type": "driver license", "number": "123445"}
   ]
 
 directories = {
@@ -16,8 +17,12 @@ def search_name_by_number(doc_cat, doc_num):
   doc_found = False
   for docs in doc_cat:
     if docs['number'] == doc_num:
-      print(docs['name'])
-      doc_found = True
+      try:
+        print(docs['name'])
+        doc_found = True
+      except KeyError:
+        print(f'У документа с номером {docs["number"]} нет имени')
+        return
   if doc_found == False:
     print(f'Документ с номером "{doc_num}" не найден')
 
@@ -96,7 +101,13 @@ def new_shelf(dir_cat):
     dir_cat[new_shelf_num] = []
     print(f'Полка с номером "{new_shelf_num}" успешно создана. Самое время поместить на нее документы!')
 
-    
+def names_list(doc_cat):
+  for docs in documents:
+    try:
+      print(docs["name"])
+    except KeyError:
+      print(f'У документа с номером {docs["number"]} нет имени')
+ 
 def hello_message():
   print('*****************************************************')
   print('**      Добро пожаловать в каталог документов      **')
@@ -112,6 +123,7 @@ def instructions():
   print('d  - удалить документ из каталога')
   print('m  - перенести документ на другую полку')
   print('as - создать новую полку')
+  print('n  - Вывести перечень всех имен всех владельцев документов')
   print('h  - заново вывести справку по командам')
   print('q  - выйти из программы')
   print('')
@@ -140,6 +152,8 @@ def command_selector(user_choice):
     move_doc(directories)
   elif user_choice == 'as':
     new_shelf(directories)
+  elif user_choice == 'n':
+    names_list(documents)
   else:
     print('Возможно, вы что-то ввели не так. Перепроверьте введенные вами данные. Вызвать помощь можно командой "h"')
 
